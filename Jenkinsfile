@@ -5,7 +5,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat "docker build -t IamLokii06/2336_ISA2 ."
+                    bat "docker build -t iamlokii06/2336_isa2 ."
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    bat "docker run -d --name my-app-container IamLokii06/2336_ISA2"
+                    bat "docker run -d --name my-app-container iamlokii06/2336_isa2"
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
     post {
         always {
             script {
-                bat "docker rmi -f IamLokii06/2336_ISA2 || true"
+                bat "docker rmi -f iamlokii06/2336_isa2 || true"
             }
         }
     }
