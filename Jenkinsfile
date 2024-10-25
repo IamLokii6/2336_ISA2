@@ -16,15 +16,26 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    sh 'docker rm -f 2336'
+                    sh '''
+                    if [ "$(docker ps -q -f name=2336)" ]; then
+                        docker rm -f 2336
+                    fi
+                    '''
                 }
             }
         }
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run -d --name 2336 2336:latest' 
+                    sh 'docker run -d --name 2336 2336-app:latest'
                 }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                sh 'docker rmi -f 2336-app:latest || true'
             }
         }
     }
