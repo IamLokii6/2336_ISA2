@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -10,30 +9,23 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def app = docker.build("myapp:latest")
+                    def app = docker.build("2336-app:latest")
                 }
             }
         }
-        stage('Clean Up') {
+        stage('Cleanup') {
             steps {
                 script {
-                    sh "docker rm -f 2336 || true"
+                    sh 'docker rm -f 2336'
                 }
             }
         }
-        stage('Run Container') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    sh "docker run -d --name 2336 myapp:latest"
+                    sh 'docker run -d --name 2336 2336:latest' 
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up after build...'
-            sh "docker rmi myapp:latest || true"
         }
     }
 }
