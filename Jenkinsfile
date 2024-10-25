@@ -1,30 +1,39 @@
-// Jenkinsfile
 pipeline {
     agent any
+
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/IamLokii/2336_ISA2.git'
+                git url: 'https://github.com/IamLokii6/2336_ISA2.git', branch: 'main'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("2336_ISA2")
+                    def app = docker.build("myapp:latest")
+                }
+            }
+        }
+        stage('Clean Up') {
+            steps {
+                script {
+                    sh "docker rm -f 2336 || true"
                 }
             }
         }
         stage('Run Container') {
             steps {
                 script {
-                    try {
-                        sh 'docker rm -f 2336_ISA@'
-                    } catch (Exception e) {
-                        echo "No existing container to remove"
-                    }
-                    sh 'docker run -d --name 2336 2336_ISA2'
+                    sh "docker run -d --name 2336 myapp:latest"
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up after build...'
+            sh "docker rmi myapp:latest || true"
         }
     }
 }
